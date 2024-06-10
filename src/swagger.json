@@ -1,0 +1,493 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "version": "1.0.0",
+    "title": "BOILERPLATE-NODEJS-EXPRESS-RAW-POSTGRESQL"
+  },
+  "schemes": ["http", "https"],
+  "paths": {
+    "/api/v1/admin/register": {
+      "post": {
+        "x-swagger-router-controller": "users",
+        "operationId": "user-register",
+        "tags": ["Admin Routes"],
+        "summary": "Account Registration Endpoint",
+        "parameters": [
+          {
+            "name": "payload",
+            "in": "body",
+            "description": "User details",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "email": {
+                  "type": "string",
+                  "example": "jhondoe@email.com"
+                },
+                "password": {
+                  "type": "string",
+                  "example": "TheMostSecurePassword123#"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Response Format",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "code": {
+                  "type": "integer",
+                  "example": 200
+                },
+                "message": {
+                  "type": "string",
+                  "example": "Success"
+                },
+                "result": {
+                  "type": "boolean",
+                  "example": true
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Response Format",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "code": {
+                  "type": "integer",
+                  "example": 400
+                },
+                "message": {
+                  "type": "string",
+                  "example": "An account with this email already exists!"
+                },
+                "result": {
+                  "type": "boolean",
+                  "example": null
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/admin/login": {
+      "post": {
+        "x-swagger-router-controller": "users",
+        "operationId": "user-login",
+        "tags": ["Admin Routes"],
+        "summary": "Account Signin Endpoint",
+        "parameters": [
+          {
+            "name": "payload",
+            "in": "body",
+            "description": "User credentials",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "email": {
+                  "type": "string",
+                  "example": "jhondoe@curriki.com"
+                },
+                "password": {
+                  "type": "string",
+                  "example": "TheMostSecurePassword123#"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Response Format",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "code": {
+                  "type": "integer",
+                  "example": 200
+                },
+                "message": {
+                  "type": "string",
+                  "example": "Success"
+                },
+                "result": {
+                  "type": "string",
+                  "example": "some JWT Token"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Response Format",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "code": {
+                  "type": "integer",
+                  "example": 400
+                },
+                "message": {
+                  "type": "string",
+                  "example": "Invalid email or password provided!"
+                },
+                "result": {
+                  "type": null,
+                  "example": null
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/admin/getProfile": {
+      "get": {
+        "x-swagger-router-controller": "users",
+        "operationId": "View Profile",
+        "tags": ["Admin Routes"],
+        "summary": "Get Profile",
+        "parameters": [
+          {
+            "name": "Authorization",
+            "in": "header",
+            "description": "Authorization",
+            "type": "string",
+            "default": "Bearer {token}",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Response Format",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "code": {
+                  "type": "integer",
+                  "example": 200
+                },
+                "message": {
+                  "type": "string",
+                  "example": "Success"
+                },
+                "result": {
+                  "type": "object",
+                  "example": {
+                    "id": 1,
+                    "email": "jhondoe@email.com",
+                    "createdAt": "2023-12-12T10:23:55.242Z",
+                    "updatedAt": "2023-12-12T11:09:37.077Z"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/admin/verifyResetPasswordToken": {
+      "get": {
+        "x-swagger-router-controller": "users",
+        "operationId": "Verify Reset Password Token",
+        "tags": ["Admin Routes"],
+        "summary": "Verify Reset Password Token",
+        "parameters": [
+          {
+            "name": "token",
+            "in": "query",
+            "description": "token",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "default": "token"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Response Format",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "code": {
+                  "type": "integer",
+                  "example": 200
+                },
+                "message": {
+                  "type": "string",
+                  "example": "Success"
+                },
+                "result": {
+                  "type": "boolean",
+                  "example": true
+                }
+              }
+            }
+          },
+          "400": {
+              "description": "Response Format",
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "code": {
+                    "type": "integer",
+                    "example": 400
+                  },
+                  "message": {
+                    "type": "string",
+                    "example": "Could not verify the token"
+                  },
+                  "result": {
+                    "type": "boolean",
+                    "example": null
+                  }
+                }
+              }
+            }
+        }
+      }
+    },
+    "/api/v1/admin/updatePassword": {
+      "patch": {
+        "x-swagger-router-controller": "users",
+        "operationId": "Update Acount password",
+        "tags": ["Admin Routes"],
+        "summary": "Update Account Password",
+        "parameters": [
+          {
+            "name": "Authorization",
+            "in": "header",
+            "description": "Authorization",
+            "type": "string",
+            "default": "Bearer {token}",
+            "required": true
+          },
+          {
+            "name": "payload",
+            "in": "body",
+            "description": "User credentials",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "password": {
+                  "type": "string",
+                  "example": "StrongPassword1@"
+                },
+                "newPassword": {
+                  "type": "string",
+                  "example": "StrongPassword2@"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Response Format",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "code": {
+                  "type": "integer",
+                  "example": 200
+                },
+                "message": {
+                  "type": "string",
+                  "example": "Success"
+                },
+                "result": {
+                  "type": "boolean",
+                  "example": true
+                }
+              }
+            }
+          },
+          "400": {
+              "description": "Response Format",
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "code": {
+                    "type": "integer",
+                    "example": 400
+                  },
+                  "message": {
+                    "type": "string",
+                    "example": "Incorrect password!"
+                  },
+                  "result": {
+                    "type": "boolean",
+                    "example": null
+                  }
+                }
+              }
+            }      
+        }
+      }
+    },
+    "/api/v1/admin/forgetPassword": {
+      "post": {
+        "x-swagger-router-controller": "users",
+        "operationId": "Request Reset Password Link",
+        "tags": ["Admin Routes"],
+        "summary": "Request Reset Password Link",
+        "parameters": [
+          {
+            "name": "payload",
+            "in": "body",
+            "description": "User credentials",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "email": {
+                  "type": "string",
+                  "example": "mehmoodce@gmail.com"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Response Format",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "code": {
+                  "type": "integer",
+                  "example": 200
+                },
+                "message": {
+                  "type": "string",
+                  "example": "Success"
+                },
+                "result": {
+                  "type": "boolean",
+                  "example": true
+                }
+              }
+            }
+          },
+          "400": [
+            {
+              "description": "Response Format",
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "code": {
+                    "type": "integer",
+                    "example": 400
+                  },
+                  "message": {
+                    "type": "string",
+                    "example": "Incorrect password!"
+                  },
+                  "result": {
+                    "type": "boolean",
+                    "example": null
+                  }
+                }
+              }
+            },
+            {
+              "description": "Response Format",
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "code": {
+                    "type": "integer",
+                    "example": 400
+                  },
+                  "message": {
+                    "type": "string",
+                    "example": "You cannot set your current password as your new password!"
+                  },
+                  "result": {
+                    "type": "boolean",
+                    "example": null
+                  }
+                }
+              }
+            }
+          ]
+        }
+      }
+    },
+    "/api/v1/admin/resetPassword": {
+      "post": {
+        "x-swagger-router-controller": "users",
+        "operationId": "Reset Password",
+        "tags": ["Admin Routes"],
+        "summary": "Reset Password",
+        "parameters": [
+          {
+            "name": "payload",
+            "in": "body",
+            "description": "User credentials",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "password": {
+                  "type": "string",
+                  "example": "Mehmood@email@"
+                },
+                "token": {
+                  "type": "string",
+                  "example": "token"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Response Format",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "code": {
+                  "type": "integer",
+                  "example": 200
+                },
+                "message": {
+                  "type": "string",
+                  "example": "Success"
+                },
+                "result": {
+                  "type": "boolean",
+                  "example": true
+                }
+              }
+            }
+          },
+          "400": {
+              "description": "Response Format",
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "code": {
+                    "type": "integer",
+                    "example": 400
+                  },
+                  "message": {
+                    "type": "string",
+                    "example": "Reset password link Expired"
+                  },
+                  "result": {
+                    "type": "boolean",
+                    "example": null
+                  }
+                }
+              }
+            }
+        }
+      }
+    }
+  }
+}
