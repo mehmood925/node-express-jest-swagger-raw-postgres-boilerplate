@@ -9,7 +9,7 @@ class AccountsService {
   }
 
   static async getAccountsInfo(params) {
-    let response = await AccountsDal.getByIndex('userId', params.id);
+    let response = await AccountsDal.getByIndex('user_id', params.id);
     if(response.length === 0) {
       throw new CustomError(ERROR_CODES.RECORD_NOT_FOUND);
     }
@@ -22,7 +22,7 @@ class AccountsService {
       throw new CustomError(ERROR_CODES.RECORD_NOT_FOUND);
     }
     [response] = response;
-    if(response.userid !== params.userId) {
+    if(response.user_id !== params.user_id) {
       throw new CustomError(ERROR_CODES.RECORD_NOT_FOUND);
     }
     await AccountsDal.updateById(response.id, [{

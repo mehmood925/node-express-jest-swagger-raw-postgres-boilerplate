@@ -30,10 +30,10 @@ class AdminService {
     if (_pass.error) {
       throw new CustomError(ERROR_CODES.PASS_RULES_ERROR);
     }
-    const response = await AdminDal.register({
+    const response = await AdminDal.create({
       email: params.email,
       password: bcrypt.hashSync(params.password, bcrypt.genSaltSync(2)),
-      companyId: params.companyId,
+      company_id: params.company_id,
     });
     return response;
   }

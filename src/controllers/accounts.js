@@ -32,7 +32,7 @@ class AccountsController {
       const result = await AccountsService.updateBalance({
         id: req.query.id,
         balance: req.body.balance,
-        userId: req.headers.loggedUser.id
+        user_id: req.headers.loggedUser.id
       });
       return responseHandler({
         response: res,

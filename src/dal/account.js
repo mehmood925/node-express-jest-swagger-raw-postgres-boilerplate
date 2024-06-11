@@ -5,8 +5,9 @@ const { DateTime } = require('luxon');
 
 class AccountsDal {
   static async create(params) {
-    const keys = Object.keys(params);
-    const values = Object.values(params);
+    let keys = Object.keys(params);
+    keys = keys.map(key => `"${key}"`);
+    let values = Object.values(params);
     const query = `INSERT INTO accounts (${keys.join(', ')})
     VALUES (${keys.map((_, index) => `$${index + 1}`).join(', ')})
     RETURNING *;
@@ -17,7 +18,7 @@ class AccountsDal {
 
   static async getByIndex(index, value) {
     const result = await pool.query(
-      `SELECT * FROM accounts WHERE ${index} = $1`,
+      `SELECT * FROM accounts WHERE "${index}" = $1`,
       [value]
     );
     if (result.rows.length === 0) return [];
@@ -27,9 +28,9 @@ class AccountsDal {
   static async updateById(id, array) {
     let columns = '';
     array.forEach((element) => {
-      columns += `${element.column} = '${element.value}', `;
+      columns += `"${element.column}" = '${element.value}', `;
     });
-    columns += `updatedAt = '${DateTime.now().toFormat(
+    columns += `"updated_at" = '${DateTime.now().toFormat(
       'yyyy-MM-dd HH:mm:ss.SSS'
     )}'`;
     const query = `UPDATE accounts SET ${columns} WHERE id = ${id}`;

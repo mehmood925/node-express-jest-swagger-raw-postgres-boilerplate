@@ -16,7 +16,7 @@ class CompanyService {
     return response;
   }
 
-  static async deleteById(id) {
+  static async deleteById({id}) {
     const response = await CompanyDal.deleteById(id);
     return response;
   }

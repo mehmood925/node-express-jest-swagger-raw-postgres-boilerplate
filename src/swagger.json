@@ -347,7 +347,7 @@
               "properties": {
                 "email": {
                   "type": "string",
-                  "example": "mehmoodce@gmail.com"
+                  "example": "jhondoe@gmail.com"
                 }
               }
             }
@@ -435,7 +435,7 @@
               "properties": {
                 "password": {
                   "type": "string",
-                  "example": "Mehmood@email@"
+                  "example": "jhonDoe@email@"
                 },
                 "token": {
                   "type": "string",

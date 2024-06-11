@@ -6,7 +6,7 @@ class CompanyDal {
   static async register(params) {
     const { name, address, type } = params;
     const result = await pool.query(
-      'INSERT INTO companies (name, address, type) VALUES ($1, $2, $3) RETURNING *',
+      `INSERT INTO companies ("name", "address", "type") VALUES ($1, $2, $3) RETURNING *`,
       [name, address, type]
     );
     return result.rows[0];
@@ -19,7 +19,7 @@ class CompanyDal {
 
   static async getByIndex(index, value) {
     const result = await pool.query(
-      `SELECT * FROM companies WHERE ${index} = $1`,
+      `SELECT * FROM companies WHERE "${index}" = $1`,
       [value]
     );
     if (result.rows.length === 0) return [];

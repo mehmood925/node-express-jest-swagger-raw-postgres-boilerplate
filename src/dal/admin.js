@@ -4,14 +4,18 @@ const pool = require('../utils/database');
 const { DateTime } = require('luxon');
 
 class AdminDal {
-  static async register(params) {
-    const { email, password, companyId } = params;
-    const result = await pool.query(
-      'INSERT INTO admins (email, password, companyId) VALUES ($1, $2, $3) RETURNING *',
-      [email, password, companyId]
-    );
-    return result.rows[0];
+  static async create(params) {
+    let keys = Object.keys(params);
+    keys = keys.map(key => `"${key}"`);
+    let values = Object.values(params);
+    const query = `INSERT INTO admins (${keys.join(', ')})
+    VALUES (${keys.map((_, index) => `$${index + 1}`).join(', ')})
+    RETURNING *;
+  `;
+    const response = await pool.query(query, values);
+    return response.rows[0];
   }
+
 
   //static async resetPassword(params) {
   // const _pass = passCom(_complexityOptions).validate(params.password); // password validation
@@ -56,7 +60,7 @@ class AdminDal {
 
   static async getByIndex(index, value) {
     const result = await pool.query(
-      `SELECT * FROM admins WHERE ${index} = $1`,
+      `SELECT * FROM admins WHERE "${index}" = $1`,
       [value]
     );
     if (result.rows.length === 0) return [];
@@ -66,13 +70,14 @@ class AdminDal {
   static async updateById(id, array) {
     let columns = '';
     array.forEach((element) => {
-      columns += `${element.column} = '${element.value}',`;
+      columns += `"${element.column}" = '${element.value}',`;
     });
-    columns += `updatedAt = '${DateTime.now().toFormat(
+    columns += `"updated_at" = '${DateTime.now().toFormat(
       'yyyy-MM-dd HH:mm:ss.SSS'
     )}'`;
+    const query = `UPDATE admins SET ${columns} WHERE id = ${id}`;
     const result = await pool.query(
-      `UPDATE admins SET ${columns} WHERE id = ${id}`
+      query
     );
     return result;
   }
